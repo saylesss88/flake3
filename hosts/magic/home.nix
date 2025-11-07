@@ -12,6 +12,7 @@
   custom = {
     magic.hm.enable = true;
     git.enable = false;
+    gpg.enable = true;
     yazi.enable = true;
     helix.enable = true;
     jj.enable = true;

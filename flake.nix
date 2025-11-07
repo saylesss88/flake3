@@ -32,7 +32,6 @@
     pkgs = import nixpkgs {
       system = "x86_64-linux";
     };
-    # system = "x86_64-linux";
     inherit (pkgs.stdenv.hostPlatform) system;
     host = "magic";
     username = "jr";
