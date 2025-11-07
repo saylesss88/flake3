@@ -1,9 +1,4 @@
-{
-  pkgs,
-  host,
-  userVars,
-  ...
-}: {
+{pkgs, ...}: {
   home.packages = [
     # inputs.zen-browser.packages."${pkgs.system}".default
     # pkgs.python3

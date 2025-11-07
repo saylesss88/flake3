@@ -82,7 +82,7 @@
       system = "x86_64-linux";
       pkgs = pkgsFor.${system};
       specialArgs = {
-        inherit inputs host username myLib system;
+        inherit inputs host username myLib;
       };
       modules = [
         ./hosts/${host}/configuration.nix
