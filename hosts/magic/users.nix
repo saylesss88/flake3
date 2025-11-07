@@ -7,6 +7,11 @@
     isNormalUser = true;
     description = "jr";
     uid = 1000;
+    openssh = {
+      authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDp1GILFjayKi/mKBMg36nDV8TyG+rZDXmNheYdOzA4N (none)"
+      ];
+    };
     extraGroups = lib.mkForce ["networkmanager"];
     group = "jr";
     ignoreShellProgramCheck = true;

@@ -41,6 +41,8 @@
           LogLevel = "VERBOSE";
           PermitRootLogin = "no";
           KexAlgorithms = [
+            "mlkem768x25519-sha256"
+            "sntrup761x25519-sha512"
             "curve25519-sha256@libssh.org"
             "ecdh-sha2-nistp521"
             "ecdh-sha2-nistp384"
@@ -48,9 +50,9 @@
             "diffie-hellman-group-exchange-sha256"
           ];
           Ciphers = [
-            "chacha20-poly1305@openssh.com"
             "aes256-gcm@openssh.com"
             "aes128-gcm@openssh.com"
+            "chacha20-poly1305@openssh.com"
             "aes256-ctr"
             "aes192-ctr"
             "aes128-ctr"

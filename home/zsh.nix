@@ -36,78 +36,77 @@
       setopt pushdminus
     '';
     initContent = ''
-               fastfetch
-               if [ -f $HOME/.zshrc-personal ]; then
-                 source $HOME/.zshrc-personal
-               fi
-               source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-               source ${pkgs.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh
-               source <(jj util completion zsh)
-               # source <(tailscale completion zsh)
-               eval "$(${pkgs.coreutils}/bin/dircolors -b)"
-               eval "$(fzf --zsh)"
+                fastfetch
+                if [ -f $HOME/.zshrc-personal ]; then
+                  source $HOME/.zshrc-personal
+                fi
+                source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+                source ${pkgs.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh
+                source <(jj util completion zsh)
+                # source <(tailscale completion zsh)
+                eval "$(${pkgs.coreutils}/bin/dircolors -b)"
+                eval "$(fzf --zsh)"
 
 
-               # Allow Ctrl-z to toggle between suspend and resume
-              function Resume {
-                fg
-                zle push-input
-                BUFFER=""
-                zle accept-line
-              }
-              zle -N Resume
-              bindkey "^Z" Resume
+                # Allow Ctrl-z to toggle between suspend and resume
+               function Resume {
+                 fg
+                 zle push-input
+                 BUFFER=""
+                 zle accept-line
+               }
+               zle -N Resume
+               bindkey "^Z" Resume
 
-              fr() {
-                run0 nixos-rebuild switch --flake "/home/$USER/flake3#"$(hostname)
-              }
-
-
-        # Usage: rbs <hostname> <username>
-               eval "$(zoxide init zsh)"
-               eval "$(mcfly init zsh)"
-               eval "$(direnv hook zsh)"
-
-      # if [ -n "$TTY" ]; then
-      #   export GPG_TTY=$(tty)
-      # else
-      #   export GPG_TTY="$TTY"
-      # fi
-      export WLR_NO_HARDWARE_CURSORS=1
+               fr() {
+                 run0 nixos-rebuild switch --flake "/home/$USER/flake3#"$(hostname)
+               }
 
 
-      # # SSH_AUTH_SOCK set to GPG to enable using gpgagent as the ssh agent.
-      # export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-      # gpgconf --launch gpg-agent
+         # Usage: rbs <hostname> <username>
+                eval "$(zoxide init zsh)"
+                eval "$(mcfly init zsh)"
+                eval "$(direnv hook zsh)"
 
-        export MANPAGER='nvim +Man!'
-               export MCFLY_KEY_SCHEME=vim
-               export MCFLY_FUZZY=2
-               export MCFLY_RESULTS=50
-               export MCFLY_RESULTS_SORT=LAST_RUN
-               export MCFLY_INTERFACE_VIEW=BOTTOM
-               export TERM=xterm-256color
-               export EDITOR=hx
-               export VISUAL=hx
-               export PATH=$HOME/.cargo/bin:$PATH
-               export ZSH_CUSTOM=/nix/store/0ajaww0dwlfj6sd9drslzjpw2grhv177-oh-my-zsh-2024-10-01/share/oh-my-zsh/plugins
-               export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git"'
-               export FZF_DEFAULT_OPTS='-i --height=50%'
-               # Print tree structure in the preview window
-              export FZF_ALT_C_OPTS="
-                --walker-skip .git,node_modules,target
-                --preview 'tree -C {}'"
+       # if [ -n "$TTY" ]; then
+       #   export GPG_TTY=$(tty)
+       # else
+       #   export GPG_TTY="$TTY"
+       # fi
+       export WLR_NO_HARDWARE_CURSORS=1
 
-               # CTRL-Y to copy the command into clipboard using pbcopy
-              export FZF_CTRL_R_OPTS="
-                --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
-                --color header:italic
-                --header 'Press CTRL-Y to copy command into clipboard'"
-               # export HELIX_RUNTIME=~/src/helix/runtime
-               # export NIX_PATH="$NIX_PATH:my-flake=flake:/home/jr/flake"
-               # Makes your flake accessible and importable within Nix expressions
-               # using the alias `flaked`
-               export NIX_PATH="$NIX_PATH:flake=flake:/home/jr/flake"
+      export GPG_TTY=$(tty)
+      export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+      gpgconf --launch gpg-agent
+
+         export MANPAGER='nvim +Man!'
+                export MCFLY_KEY_SCHEME=vim
+                export MCFLY_FUZZY=2
+                export MCFLY_RESULTS=50
+                export MCFLY_RESULTS_SORT=LAST_RUN
+                export MCFLY_INTERFACE_VIEW=BOTTOM
+                export TERM=xterm-256color
+                export EDITOR=hx
+                export VISUAL=hx
+                export PATH=$HOME/.cargo/bin:$PATH
+                export ZSH_CUSTOM=/nix/store/0ajaww0dwlfj6sd9drslzjpw2grhv177-oh-my-zsh-2024-10-01/share/oh-my-zsh/plugins
+                export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git"'
+                export FZF_DEFAULT_OPTS='-i --height=50%'
+                # Print tree structure in the preview window
+               export FZF_ALT_C_OPTS="
+                 --walker-skip .git,node_modules,target
+                 --preview 'tree -C {}'"
+
+                # CTRL-Y to copy the command into clipboard using pbcopy
+               export FZF_CTRL_R_OPTS="
+                 --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+                 --color header:italic
+                 --header 'Press CTRL-Y to copy command into clipboard'"
+                # export HELIX_RUNTIME=~/src/helix/runtime
+                # export NIX_PATH="$NIX_PATH:my-flake=flake:/home/jr/flake"
+                # Makes your flake accessible and importable within Nix expressions
+                # using the alias `flaked`
+                export NIX_PATH="$NIX_PATH:flake=flake:/home/jr/flake"
     '';
     shellAliases = {
       sv = "sudo nvim";
