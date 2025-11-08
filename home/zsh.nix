@@ -63,10 +63,9 @@
                }
 
 
-         # Usage: rbs <hostname> <username>
                 eval "$(zoxide init zsh)"
                 eval "$(mcfly init zsh)"
-                eval "$(direnv hook zsh)"
+                # eval "$(direnv hook zsh)"
 
        # if [ -n "$TTY" ]; then
        #   export GPG_TTY=$(tty)
