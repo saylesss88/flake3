@@ -15,6 +15,9 @@
     "/boot/crypto_keyfile.bin" = null;
   };
 
+  nix.settings.http-connections = 100;
+  systemd.services.nix-daemon.serviceConfig.MemoryMax = "8G";
+
   boot.loader.grub.enableCryptodisk = true;
 
   boot.initrd.luks.devices."luks-457e04f3-7eb9-4223-a07b-b7b384b20575".keyFile = "/boot/crypto_keyfile.bin";
