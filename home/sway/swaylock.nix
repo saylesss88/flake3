@@ -5,7 +5,7 @@
 
     settings = {
       # image = lib.mkDefault "${inputs.wallpapers}/wallpaper-theme-converter24.png";
-      image = "/home/jr/Pictures/Wallpapers/voxel-city.jpg";
+      image = "/home/jr/Pictures/Wallpapers/space.jpg";
 
       clock = true;
       timestr = "%T";
