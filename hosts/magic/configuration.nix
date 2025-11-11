@@ -71,6 +71,9 @@
     zram.enable = true;
     security = {
       auditd.enable = true;
+      openssh.enable = true;
+      systemd.enable = true;
+      security.enable = true;
     };
   };
   # Explicitly disable wireless adapters

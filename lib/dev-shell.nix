@@ -1,7 +1,5 @@
-{
-  inputs,
-  system ? "x86_64-linux",
-}: let
+{inputs}: let
+  system = "x86_64-linux";
   # Instantiate nixpkgs with the given system and allow unfree packages
   pkgs = import inputs.nixpkgs {
     inherit system;

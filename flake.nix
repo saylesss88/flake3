@@ -5,15 +5,15 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    lix = {
-      url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
-      flake = false;
-    };
-    lix-module = {
-      url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.lix.follows = "lix";
-    };
+    # lix = {
+    #   url = "https://git.lix.systems/lix-project/lix/archive/main.tar.gz";
+    #   flake = false;
+    # };
+    # lix-module = {
+    #   url = "https://git.lix.systems/lix-project/nixos-module/archive/main.tar.gz";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    #   inputs.lix.follows = "lix";
+    # };
     systems.url = "github:nix-systems/default-linux";
     # ghostty.url = "github:ghostty-org/ghostty";
     # helix.url = "github:helix-editor/helix";
@@ -28,8 +28,8 @@
     self,
     nixpkgs,
     home-manager,
-    lix,
-    lix-module,
+    # lix,
+    # lix-module,
     treefmt-nix,
     systems,
     ...
@@ -92,7 +92,7 @@
       modules = [
         ./hosts/${host}/configuration.nix
         home-manager.nixosModules.home-manager
-        lix-module.nixosModules.default
+        # lix-module.nixosModules.default
         nixosModules # add all modules from ./nixos
         caches
         {
