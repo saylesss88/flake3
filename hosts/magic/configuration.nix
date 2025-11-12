@@ -62,6 +62,7 @@
   custom = {
     magic.enable = true;
     greetd.enable = true;
+    thunar.enable = true;
     magic.timezone = "America/New_York";
     magic.hostname = "magic";
     magic.locale = "en_US.UTF-8";
@@ -74,6 +75,7 @@
       openssh.enable = true;
       systemd.enable = true;
       security.enable = true;
+      modprobe.enable = true;
     };
   };
   # Explicitly disable wireless adapters
