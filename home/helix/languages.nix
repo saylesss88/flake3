@@ -195,7 +195,7 @@
           ];
           file-types = ["nix"];
           formatter = {
-            command = "${pkgs.alejandra}/bin/alejandra";
+            command = "${pkgs.nixfmt}/bin/nixfmt";
           };
         }
         {

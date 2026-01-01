@@ -9,6 +9,7 @@
     ./modprobe.nix
     ./openSSH.nix
     ./auditd.nix
+    ./dnscrypt-proxy.nix
   ];
   environment.systemPackages = [
     pkgs.vlock

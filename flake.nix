@@ -17,6 +17,14 @@
     systems.url = "github:nix-systems/default-linux";
     # ghostty.url = "github:ghostty-org/ghostty";
     # helix.url = "github:helix-editor/helix";
+    oisd = {
+      url = "https://big.oisd.nl/domainswild";
+      flake = false;
+    };
+    hagezi = {
+      url = "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/pro-onlydomains.txt";
+      flake = false;
+    };
     treefmt-nix.url = "github:numtide/treefmt-nix";
     wallpapers = {
       url = "github:saylesss88/wallpapers2";
@@ -38,7 +46,7 @@
     pkgs = import nixpkgs {
       system = "x86_64-linux";
     };
-    inherit (pkgs.stdenv.hostPlatform) system;
+    inherit (pkgs.stdenv) system;
     host = "magic";
     username = "jr";
     lib = pkgs.lib // home-manager.lib;

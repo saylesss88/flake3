@@ -1,5 +1,17 @@
 {
   "nodes": {
+    "hagezi": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-lbDMFEgwoipSczpYOFziXy/njuyXqgZGi/GrbcmPJ9s=",
+        "type": "file",
+        "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/pro-onlydomains.txt"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/pro-onlydomains.txt"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -52,10 +64,24 @@
         "type": "github"
       }
     },
+    "oisd": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-upG1zW4ktnZofsKdXhsRTx94arsS9USbBQaOKNzF1tg=",
+        "type": "file",
+        "url": "https://big.oisd.nl/domainswild"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://big.oisd.nl/domainswild"
+      }
+    },
     "root": {
       "inputs": {
+        "hagezi": "hagezi",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
+        "oisd": "oisd",
         "systems": "systems",
         "treefmt-nix": "treefmt-nix",
         "wallpapers": "wallpapers"
