@@ -11,16 +11,16 @@
   boot.loader.grub.useOSProber = false;
 
   # Setup keyfile
-  boot.initrd.secrets = {
-    "/boot/crypto_keyfile.bin" = null;
-  };
+  # boot.initrd.secrets = {
+  #   "/boot/crypto_keyfile.bin" = null;
+  # };
 
   nix.settings.http-connections = 100;
   systemd.services.nix-daemon.serviceConfig.MemoryMax = "8G";
 
-  boot.loader.grub.enableCryptodisk = true;
+  # boot.loader.grub.enableCryptodisk = true;
 
-  boot.initrd.luks.devices."luks-457e04f3-7eb9-4223-a07b-b7b384b20575".keyFile = "/boot/crypto_keyfile.bin";
+  # boot.initrd.luks.devices."luks-457e04f3-7eb9-4223-a07b-b7b384b20575".keyFile = "/boot/crypto_keyfile.bin";
   networking.hostName = "magic"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -79,7 +79,7 @@
     };
   };
   # Explicitly disable wireless adapters
-  networking.wireless.enable = false; # Enables wireless support via wpa_supplicant.
+  # networking.wireless.enable = false; # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";

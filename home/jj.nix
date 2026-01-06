@@ -7,9 +7,11 @@
   #
   #
   ...
-}: let
+}:
+let
   cfg = config.custom.jj;
-in {
+in
+{
   options.custom.jj = {
     enable = lib.mkOption {
       type = lib.types.bool;
@@ -31,7 +33,7 @@ in {
 
     packages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      default = with pkgs; [meld]; # lazyjj
+      default = with pkgs; [ meld ]; # lazyjj
       description = "Additional Jujutsu-related packages to install";
     };
 
@@ -40,17 +42,15 @@ in {
       default = {
         ui = {
           # default-command = "log-recent";
-          default-command = ["status" "--no-pager"];
+          default-command = [
+            "status"
+            "--no-pager"
+          ];
           diff-editor = "gitpatch";
           # diff-editor = ["nvim" "-c" "DiffEditor" "$left" "$right" "$output"];
           # diff-formatter = ["meld" "$left" "$right"];
           merge-editor = ":builtin";
           conflict-marker-style = "diff";
-        };
-        git = {
-          # remove the need for `--allow-new` when pushing new bookmarks
-          auto-local-bookmark = true;
-          push-new-bookmarks = true;
         };
         revset-aliases = {
           "closest_bookmark(to)" = "heads(::to & bookmarks())";
@@ -85,27 +85,97 @@ in {
           ];
         };
         aliases = {
-          c = ["commit"];
-          ci = ["commit" "--interactive"];
-          e = ["edit"];
-          i = ["git" "init" "--colocate"];
-          tug = ["bookmark" "move" "--from" "closest_bookmark(@-)" "--to" "@-"];
-          mb = ["bookmark" "set" "-r" "@"];
-          log-recent = ["log" "-r" "default() & recent()"];
-          nb = ["bookmark" "create" "-r" "@-"]; # new bookmark
-          upmain = ["bookmark" "set" "main"];
-          squash-desc = ["squash" "::@" "-d" "@"];
-          rebase-main = ["rebase" "-d" "main"];
-          amend = ["describe" "-m"];
-          pushall = ["git" "push" "--all"];
-          push = ["git" "push" "--allow-new"];
-          pull = ["git" "fetch"];
-          dmain = ["diff" "-r" "main"];
-          l = ["log" "-T" "builtin_log_compact"];
-          lf = ["log" "-r" "all()"];
-          r = ["rebase"];
-          s = ["squash"];
-          si = ["squash" "--interactive"];
+          c = [ "commit" ];
+          ci = [
+            "commit"
+            "--interactive"
+          ];
+          e = [ "edit" ];
+          i = [
+            "git"
+            "init"
+            "--colocate"
+          ];
+          tug = [
+            "bookmark"
+            "move"
+            "--from"
+            "closest_bookmark(@-)"
+            "--to"
+            "@-"
+          ];
+          mb = [
+            "bookmark"
+            "set"
+            "-r"
+            "@"
+          ];
+          log-recent = [
+            "log"
+            "-r"
+            "default() & recent()"
+          ];
+          nb = [
+            "bookmark"
+            "create"
+            "-r"
+            "@-"
+          ]; # new bookmark
+          upmain = [
+            "bookmark"
+            "set"
+            "main"
+          ];
+          squash-desc = [
+            "squash"
+            "::@"
+            "-d"
+            "@"
+          ];
+          rebase-main = [
+            "rebase"
+            "-d"
+            "main"
+          ];
+          amend = [
+            "describe"
+            "-m"
+          ];
+          pushall = [
+            "git"
+            "push"
+            "--all"
+          ];
+          push = [
+            "git"
+            "push"
+            "--allow-new"
+          ];
+          pull = [
+            "git"
+            "fetch"
+          ];
+          dmain = [
+            "diff"
+            "-r"
+            "main"
+          ];
+          l = [
+            "log"
+            "-T"
+            "builtin_log_compact"
+          ];
+          lf = [
+            "log"
+            "-r"
+            "all()"
+          ];
+          r = [ "rebase" ];
+          s = [ "squash" ];
+          si = [
+            "squash"
+            "--interactive"
+          ];
           squash-push = [
             "squash"
             "::@"
