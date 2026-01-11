@@ -1,10 +1,11 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./users.nix
-    ./nix-repl-server.nix
+    inputs.mdbook-nix-repl.nixosModules.default
+    # ./nix-repl-server.nix
   ];
 
   custom.nix-repl-server = {
@@ -83,7 +84,7 @@
     magic.locale = "en_US.UTF-8";
     # drivers.amdgpu.enable = true;
     utils.enable = true;
-    # nix.enable = true;
+    nix.enable = true;
     zram.enable = true;
     security = {
       auditd.enable = true;
@@ -149,10 +150,11 @@
   # Or disable the firewall altogether.
   hardware.graphics.enable = true;
   # hardware.graphics.driSupport32Bit = true;
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  # nix.settings.experimental-features = [
+  #   "nix-command"
+  #   "flakes"
+  #   "pipe-operators"
+  # ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

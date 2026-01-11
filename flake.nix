@@ -32,8 +32,9 @@
       flake = false;
     };
     mdbook-nix-repl = {
-      url = "path:/home/jr/mdbook-nix-repl";
-      flake = false;
+      url = "github:saylesss88/mdbook-nix-repl?dir=server";
+      # url = "path:/home/jr/mdbook-nix-repl";
+      # flake = false;
     };
   };
 

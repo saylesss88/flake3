@@ -2,24 +2,34 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
-
-with lib;
 
 let
   cfg = config.custom.nix-repl-server;
 
+  serverSource = inputs.mdbook-nix-repl + "/server";
+
+  # 1. Build the binary using your package definition
+  # serverPkg = pkgs.callPackage ./server-pkg.nix { };
+  serverPkg = pkgs.callPackage ./server-pkg.nix {
+    src = serverSource;
+  };
+
+  # 2. Build a minimal container image containing just the server + nix + deps
   nixReplImage = pkgs.dockerTools.buildLayeredImage {
     name = "nix-repl-server";
     tag = "latest";
 
-    contents = with pkgs; [
-      cfg.package
-      nix
-      cacert
-      tini
-      bashInteractive
+    # dependencies needed at runtime inside the container
+    contents = [
+      serverPkg
+      pkgs.nix
+      pkgs.bashInteractive
+      pkgs.cacert
+      pkgs.tini
+      pkgs.coreutils
     ];
 
     config = {
@@ -27,121 +37,56 @@ let
         "${pkgs.tini}/bin/tini"
         "--"
       ];
-      Cmd = [ "${cfg.package}/bin/nix-repl-server" ];
+      Cmd = [ "${serverPkg}/bin/nix-repl-server" ];
       ExposedPorts = {
         "8080/tcp" = { };
       };
+      # Important: Container must see 0.0.0.0 to receive traffic from host port mapping
       Env = [
-        "NIX_PATH=/nix/var/nix/profiles/default"
-        "PATH=/usr/bin:/bin:${pkgs.nix}/bin"
-        "XDG_RUNTIME_DIR=/run/user/1000"
+        "NIX_REPL_BIND=0.0.0.0"
+        "NIX_CONFIG=experimental-features = nix-command flakes"
+        "SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
       ];
     };
   };
 in
 {
   options.custom.nix-repl-server = {
-    enable = mkEnableOption "nix-repl-server in rootless Podman";
-
-    user = mkOption {
-      type = types.str;
-      default = "nixrepl";
-      description = "User to run the rootless container";
-    };
-
-    port = mkOption {
-      type = types.port;
+    enable = lib.mkEnableOption "nix-repl-server container";
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 8080;
-      description = "Port to expose";
+      description = "Host port to map to the container";
     };
-
-    package = mkOption {
-      type = types.package;
-      description = "The nix-repl-server package";
+    tokenFile = lib.mkOption {
+      type = lib.types.path;
+      default = "/etc/nix-repl-server.env";
+      description = "Path to file containing NIX_REPL_TOKEN=...";
     };
   };
 
-  config = mkIf cfg.enable {
-    virtualisation.podman = {
-      enable = true;
-      defaultNetwork.settings.dns_enabled = true;
-    };
+  config = lib.mkIf cfg.enable {
+    # Enable Podman backend
+    virtualisation.podman.enable = true;
+    virtualisation.oci-containers.backend = "podman";
 
-    users.groups.${cfg.user} = { };
-    users.users.${cfg.user} = {
-      isSystemUser = true;
-      group = cfg.user;
-      home = "/var/lib/${cfg.user}";
-      createHome = true;
-      subUidRanges = [
-        {
-          startUid = 100000;
-          count = 65536;
-        }
-      ];
-      subGidRanges = [
-        {
-          startGid = 100000;
-          count = 65536;
-        }
+    # The OCI container definition
+    virtualisation.oci-containers.containers.nix-repl-server = {
+      image = "nix-repl-server:latest";
+
+      # This effectively "loads" the image into Podman on boot
+      imageFile = nixReplImage;
+
+      ports = [ "127.0.0.1:${toString cfg.port}:8080" ];
+
+      # Inject the token safely at runtime (not in Nix store)
+      environmentFiles = [ cfg.tokenFile ];
+
+      extraOptions = [
+        "--cap-drop=ALL"
+        "--security-opt=no-new-privileges"
+        "--pull=never" # Use the local loaded image
       ];
     };
-
-    # nix.settings.allowed-users = [
-    #   cfg.user
-    #   "root"
-    #   "@wheel"
-    # ];
-
-    # Load the container image
-    systemd.services.podman-nix-repl-load = {
-      description = "Load nix-repl-server container image";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
-
-      path = with pkgs; [
-        podman
-        shadow
-      ];
-
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        User = cfg.user;
-        Environment = "PATH=/run/wrappers/bin:${pkgs.shadow}/bin:${pkgs.podman}/bin";
-        # ExecStart = "${pkgs.podman}/bin/podman load -i ${nixReplImage}";
-        ExecStart = "${pkgs.podman}/bin/podman run --rm --name nix-repl-server -p 127.0.0.1:${toString cfg.port}:8080 -e NIX_REPL_BIND=0.0.0.0 -e NIX_REPL_TOKEN=9deb7efadb74b9e962e7911bb5dcf3b1fef278a1d915b526 localhost/nix-repl-server:latest";
-      };
-    };
-
-    # Run the container
-    systemd.services.nix-repl-container = {
-      description = "Nix REPL Server Container";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "podman-nix-repl-load.service" ];
-      requires = [ "podman-nix-repl-load.service" ];
-
-      path = with pkgs; [
-        podman
-        shadow
-      ];
-
-      serviceConfig = {
-        Type = "simple";
-        Restart = "always";
-        RestartSec = "10s";
-        User = cfg.user;
-        Environment = "PATH=/run/wrappers/bin:${pkgs.shadow}/bin:${pkgs.podman}/bin";
-        ExecStart = "${pkgs.podman}/bin/podman run --rm --name nix-repl-server -p 127.0.0.1:${toString cfg.port}:8080 localhost/nix-repl-server:latest";
-        ExecStop = "${pkgs.podman}/bin/podman stop -t 10 nix-repl-server";
-
-        # Security hardening
-        NoNewPrivileges = true;
-        PrivateTmp = true;
-      };
-    };
-
-    networking.firewall.allowedTCPPorts = [ cfg.port ];
   };
 }
