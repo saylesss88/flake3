@@ -169,6 +169,7 @@
       c = "__zoxide_zi";
       psc = "ps xawf -eo pid,user,cgroup,args";
       j = "just";
+      sudo = "run0";
     };
   };
 }

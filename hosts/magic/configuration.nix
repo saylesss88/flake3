@@ -1,14 +1,29 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./users.nix
+    ./nix-repl-server.nix
   ];
+
+  custom.nix-repl-server = {
+    enable = true;
+    port = 8080; # Optional, defaults to 8080
+    tokenFile = "/etc/nix-repl-server.env";
+  };
 
   # Bootloader.
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/vda";
   boot.loader.grub.useOSProber = false;
+  boot = {
+    kernelPackages = pkgs.linuxPackages_zen;
+    tmp = {
+      useTmpfs = true;
+      tmpfsSize = "50%";
+    };
+  };
 
   # Setup keyfile
   # boot.initrd.secrets = {
@@ -56,8 +71,8 @@
     yazi
   ];
 
-  environment.memoryAllocator.provider = "graphene-hardened-light";
-  boot.kernelModules = ["kvm-amd"];
+  # environment.memoryAllocator.provider = "graphene-hardened-light";
+  boot.kernelModules = [ "kvm-amd" ];
 
   custom = {
     magic.enable = true;
@@ -134,7 +149,10 @@
   # Or disable the firewall altogether.
   hardware.graphics.enable = true;
   # hardware.graphics.driSupport32Bit = true;
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

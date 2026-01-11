@@ -3,11 +3,9 @@
   lib,
   config,
   ...
-}:
-let
+}: let
   cfg = config.custom.thunar;
-in
-{
+in {
   options.custom.thunar = {
     enable = lib.mkEnableOption "Enable thunar module";
   };

@@ -102,6 +102,8 @@ in {
         "lockdown=confidentiality"
         # "rd.udev.log_level=3"
         # "udev.log_priority=3"
+        "kernel.unprivileged_userns_clone=1"
+        "user.max_user_namespaces=28633" # Default + margin
       ];
     };
   };

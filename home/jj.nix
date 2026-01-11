@@ -7,11 +7,9 @@
   #
   #
   ...
-}:
-let
+}: let
   cfg = config.custom.jj;
-in
-{
+in {
   options.custom.jj = {
     enable = lib.mkOption {
       type = lib.types.bool;
@@ -33,7 +31,7 @@ in
 
     packages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      default = with pkgs; [ meld ]; # lazyjj
+      default = with pkgs; [meld]; # lazyjj
       description = "Additional Jujutsu-related packages to install";
     };
 
@@ -85,12 +83,12 @@ in
           ];
         };
         aliases = {
-          c = [ "commit" ];
+          c = ["commit"];
           ci = [
             "commit"
             "--interactive"
           ];
-          e = [ "edit" ];
+          e = ["edit"];
           i = [
             "git"
             "init"
@@ -170,8 +168,8 @@ in
             "-r"
             "all()"
           ];
-          r = [ "rebase" ];
-          s = [ "squash" ];
+          r = ["rebase"];
+          s = ["squash"];
           si = [
             "squash"
             "--interactive"
