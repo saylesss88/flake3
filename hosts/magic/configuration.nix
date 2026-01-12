@@ -5,6 +5,7 @@
     ./hardware-configuration.nix
     ./users.nix
     inputs.mdbook-nix-repl.nixosModules.default
+    ./sops.nix
     # ./nix-repl-server.nix
   ];
 

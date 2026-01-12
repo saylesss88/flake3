@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  config,
   ...
 }:
 {
@@ -24,7 +25,7 @@
       #  thunderbird
     ];
     shell = pkgs.zsh;
-    initialHashedPassword = "$y$j9T$iw3SD4j3NJaO42w3d28bz0$I24HkUwFfXn0Nk0dcZH.yoTcg93kCCn6hO.HRjSkuOD";
+    hashedPasswordFile = config.sops.secrets.password_hash.path;
   };
   users.mutableUsers = false;
 
