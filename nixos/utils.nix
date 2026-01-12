@@ -3,9 +3,11 @@
   lib,
   config,
   ...
-}: let
+}:
+let
   cfg = config.custom.utils;
-in {
+in
+{
   options.custom.utils = {
     enable = lib.mkEnableOption "Enable custom utils Package Set";
   };
@@ -16,6 +18,8 @@ in {
       pkgs.bat
       pkgs.emote
       pkgs.acl
+      pkgs.sops
+      pkgs.age
       # pkgs.commitizen
       pkgs.nmap
       pkgs.brave
